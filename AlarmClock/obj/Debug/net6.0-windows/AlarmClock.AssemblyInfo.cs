@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AlarmClock")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9af7451df344e68567854dbdde13170a596f3d6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f816c520bb0694a02e78abdd2388ea1e80ee42d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("AlarmClock")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AlarmClock")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

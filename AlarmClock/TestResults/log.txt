@@ -1,2 +1,28 @@
 [INFO]: Setup completed.
 [INFO]: *** Start of Test Case2 ***
+[PASS]: Clicked on 'Alarm' button.
+[PASS]: Select 'Alarm' tab in Menu
+[PASS]: Clicked on 'AddAlarmButton' button.
+[PASS]: Click 'AddAlarmButton' Button
+[PASS]: Clicked on 'HourPicker' button.
+[PASS]: The hour is set to 9
+[PASS]: The minutes timer is set to 00 minutes
+[PASS]: The Alarm Name is set to 'Trumpf Metamation - Login Time'
+[PASS]: Repeat Alarm Set Successfully!
+[PASS]: Clicked on 'Monday' button.
+[PASS]: Select Monday
+[PASS]: Clicked on 'Tuesday' button.
+[PASS]: Select Tuesday
+[PASS]: Clicked on 'Wednesday' button.
+[PASS]: Select Wednesday
+[PASS]: Clicked on 'Thursday' button.
+[PASS]: Select Thursday
+[PASS]: Clicked on 'Friday' button.
+[PASS]: Select Friday
+[PASS]: Clicked on 'Save' button.
+[PASS]: Alarm saved successfully
+[PASS]: Clicked on 'Trumpf Metamation - Login Time' button.
+[PASS]: Clicked on 'DeleteButton' button.
+[PASS]: Alarm deleted successfully
+[INFO]: *** End of Test Case2 ***
+[INFO]: Running cleanup (AfterAll)...

@@ -55,8 +55,7 @@ namespace ConsoleApp1.Utilities
         }
 
         public void wait(int seconds)
-        {
-            Console.WriteLine($"[INFO]: Waiting for {seconds} seconds...");
+        {            
             Thread.Sleep(seconds * 1000);
         }
 

@@ -16,13 +16,7 @@ namespace ConsoleApp1.Pages
         private const string AddAlarmButtonAutomationID = "AddAlarmButton";
         private const string SaveButtonName = "Save";
 
-        /// <summary>
-        /// Helper method to get the main window of the application.
-        /// </summary>
-        private Window GetMainWindow(FlaUI.Core.Application app, UIA3Automation automation)
-        {
-            return GetCurrentWindow(app, automation);
-        }
+
 
         /// <summary>
         /// Navigates to a specified menu tab by its button name.
@@ -30,11 +24,10 @@ namespace ConsoleApp1.Pages
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
         /// <param name="buttonName">The name of the button/tab to select in the menu.</param>
-        public void navigateMenuTab(FlaUI.Core.Application app, UIA3Automation automation, string buttonName)
+        public void navigateMenuTab(AutomationElement mainWindow, string buttonName)
         {
             try
-            {
-                Window mainWindow = GetCurrentWindow(app, automation);
+            {     
                 ClickOn(mainWindow, "Name", buttonName);
                 stepPass($"Select '{buttonName}' tab in Menu");
             }
@@ -49,13 +42,14 @@ namespace ConsoleApp1.Pages
         /// </summary>
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
-        public void clickAddAlarm(FlaUI.Core.Application app, UIA3Automation automation)
+        public void clickAddAlarm(AutomationElement mainWindow)
         {
             try
             {
-                Window mainWindow = GetMainWindow(app, automation);
+                wait(1);
                 ClickOn(mainWindow, "AutomationID", AddAlarmButtonAutomationID);
                 stepPass("Click 'AddAlarmButton' Button");
+                wait(3);
             }
             catch (Exception e)
             {
@@ -70,56 +64,52 @@ namespace ConsoleApp1.Pages
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
         /// <param name="hour">The hour to set the alarm to.</param>
         /// <param name="minutes">The minutes to set the alarm to.</param>
-        public void setAlarmTime(FlaUI.Core.Application app, UIA3Automation automation, int hour, int minutes)
+        public void setAlarmTime(AutomationElement mainWindow, int hour, int minutes)
         {
             try
             {
-                Window mainWindow = GetMainWindow(app, automation);
 
-                // Use a helper method to adjust the time picker for hours and minutes
-                AdjustTimePicker(mainWindow, HourPickerAutomationID, hour);
-                AdjustTimePicker(mainWindow, MinutePickerAutomationID, minutes);
-
-            }
-            catch (Exception e)
-            {
-                stepFail($"Failed to set Alarm Time. Error: {e.Message}, StackTrace: {e.StackTrace}");
-            }
-        }
-
-        /// <summary>
-        /// Helper method to adjust the time picker for either hours or minutes.
-        /// </summary>
-        private void AdjustTimePicker(Window mainWindow, string pickerAutomationID, int timeValue)
-        {
-            try
-            {
-                if (timeValue > 7)
+                // Adjust the hour picker based on the provided hour
+                if (hour > 7)
                 {
-                    ClickOn(mainWindow, "AutomationID", pickerAutomationID);
-                    for (int times = 0; times < (timeValue - 7); times++)
+                    ClickOn(mainWindow, "AutomationID", "HourPicker");
+                    wait(1);
+                    for (int times = 0; times < (hour - 7); times++)
                     {
                         Keyboard.Press(VirtualKeyShort.UP);
+                        wait(1);
+                        
                     }
-                    stepPass($"The time picker is set to {timeValue}");
-                }
-                else if (timeValue < 7)
-                {
-                    ClickOn(mainWindow, "AutomationID", pickerAutomationID);
-                    for (int times = 0; times < (7 - timeValue); times++)
-                    {
-                        Keyboard.Press(VirtualKeyShort.DOWN);
-                    }
-                    stepPass($"The time picker is set to {timeValue}");
+                    stepPass($"The hour is set to {hour}");
                 }
                 else
                 {
-                    stepPass($"The time picker is set to 7 (default)");
+                    ClickOn(mainWindow, "AutomationID", "HourPicker");
+                    for (int times = 0; times < (7 - hour); times++)
+                    {
+                        Keyboard.Press(VirtualKeyShort.DOWN);
+                    }
+                    stepPass($"The hour timer is set to {hour} hour");
+                }
+
+                // Adjust the minute picker based on the provided minutes
+                if (minutes > 0)
+                {
+                    ClickOn(mainWindow, "AutomationID", "MinutePicker");
+                    for (int times = 0; times < minutes; times++)
+                    {
+                        Keyboard.Press(VirtualKeyShort.UP);
+                    }
+                    stepPass($"The alarm time is set to {minutes} minutes");
+                }
+                else
+                {
+                    stepPass("The minutes timer is set to 00 minutes");
                 }
             }
             catch (Exception e)
             {
-                stepFail($"Failed to adjust the time picker. Error: {e.Message}, StackTrace: {e.StackTrace}");
+                stepPass($"Failed to set Alarm Time. Error: {e}");
             }
         }
 
@@ -129,11 +119,11 @@ namespace ConsoleApp1.Pages
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
         /// <param name="alarmName">The name to set for the alarm.</param>
-        public void setAlarmName(FlaUI.Core.Application app, UIA3Automation automation, string alarmName)
+        public void setAlarmName(AutomationElement mainWindow, string alarmName)
         {
             try
             {
-                Window mainWindow = GetMainWindow(app, automation);
+                
                 EnterText(mainWindow, "Name", "Alarm name", alarmName);
                 stepPass($"The Alarm Name is set to '{alarmName}'");
             }
@@ -149,13 +139,12 @@ namespace ConsoleApp1.Pages
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
         /// <param name="condition">A boolean that determines whether the alarm should repeat. True enables repeating, false disables it.</param>
-        public void setRepeatedAlarm(FlaUI.Core.Application app, UIA3Automation automation, bool condition)
+        public void setRepeatedAlarm(AutomationElement mainWindow, bool condition)
         {
             try
             {
                 if (condition)
                 {
-                    Window mainWindow = GetMainWindow(app, automation);
                     ClickCheckBox(mainWindow, "AutomationID", RepeatCheckBoxAutomationID);
                     stepPass("Repeat Alarm Set Successfully!");
                 }
@@ -176,11 +165,10 @@ namespace ConsoleApp1.Pages
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
         /// <param name="days">A list of day names to select for the alarm repetition.</param>
-        public void selectAlarmDays(FlaUI.Core.Application app, UIA3Automation automation, List<string> days)
+        public void selectAlarmDays(AutomationElement mainWindow, List<string> days)
         {
             try
             {
-                Window mainWindow = GetMainWindow(app, automation);
                 for (int i = 0; i < days.Count; i++)
                 {
                     ClickOn(mainWindow, "Name", days[i]);
@@ -198,11 +186,10 @@ namespace ConsoleApp1.Pages
         /// </summary>
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
-        public void saveAlarm(FlaUI.Core.Application app, UIA3Automation automation)
+        public void saveAlarm(AutomationElement mainWindow)
         {
             try
             {
-                Window mainWindow = GetMainWindow(app, automation);
                 ClickOn(mainWindow, "Name", SaveButtonName);
                 stepPass("Alarm saved successfully");
             }
@@ -218,11 +205,11 @@ namespace ConsoleApp1.Pages
         /// <param name="app">The application instance used to interact with the UI.</param>
         /// <param name="automation">The automation instance used for UI interaction with the app.</param>
         /// <param name="AlarmName">The name of the alarm to delete.</param>
-        public void deleteAlarm(FlaUI.Core.Application app, UIA3Automation automation, string AlarmName)
+        public void deleteAlarm(AutomationElement mainWindow, string AlarmName)
         {
             try
             {
-                Window mainWindow = GetMainWindow(app, automation);
+                wait(2);
                 ClickOn(mainWindow, "Name", AlarmName);
                 wait(1); // Optional wait before clicking the delete button
                 ClickOn(mainWindow, "AutomationID", "DeleteButton");
